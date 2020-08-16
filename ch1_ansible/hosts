@@ -1,0 +1,12 @@
+[cisco:children]
+cisco_router
+cisco_switch
+
+[cisco_router]
+R1 ansible_host=192.168.11.211
+R2 ansible_host=192.168.11.212
+R3 ansible_host=192.168.11.213
+R4 ansible_host=192.168.11.214
+
+[cisco_switch]
+OOB_SW ansible_host=192.168.11.210

@@ -1,0 +1,4 @@
+core_vlans:
+  - name: l3_core_vlan
+    vlan_id: 300
+    interface: GigbaitEthernet0/3

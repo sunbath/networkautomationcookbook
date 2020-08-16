@@ -1,0 +1,41 @@
+---
+  - name: "PLAY 1: Configure All LAN Switches"
+    hosts: lan
+    tags: lan
+    tasks:
+      - name: "Configure Hostname and Domain Name"
+        ios_system:
+          hostname: "{{inventory_hostname}}"
+          domain_name: "{{ domain_name }}"
+          lookup_enabled: no
+          name_servers: "{{ name_servers }}"
+
+      - name: "Configure NTP"
+        ios_ntp:
+          server: "{{ ntp_server }}"
+          logging: true
+          state: present
+      
+      - name: "P1T3: Configure Interfaces"
+        ios_interface:
+          name: "{{ item.name }}"
+          description: "{{ item.description }}"
+          mtu: "{{ intf_mtu }}"
+          state: up
+        loop: "{{ interfaces[inventory_hostname] }}"
+        register: ios_intf
+      
+      - name: "P1T4: Create L2 Vlans"
+        ios_vlan:
+          vlan_id: "{{ item.vlan_id }}"
+          name: "{{ item.name }}"
+        loop: "{{ vlans }}"
+        tags: vlan
+      
+      - name: "P1T5: Configure L2 Trunks"
+        ios_l2_interface:
+          name: "{{ item.name }}"
+          mode: "{{ item.mode }}"
+          trunk_allowed_vlans: "{{ vlans | map(attribute='vlan_id') | join(',') }}"
+          state: present
+        loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','trunk') | list }}"
