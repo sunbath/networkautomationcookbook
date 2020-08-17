@@ -57,3 +57,26 @@
           state: present
         loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','access') | list }}"
         tags: access_ports
+      
+      - name: "Configure L3 Vlan Interfaces"
+        ios_l3_interface:
+          name: " {{ item.name}}"
+          ipv4: " {{ item.ipv4 | ipv4(hst_svi_id) }}"
+        loop: "{{ svi_interfaces }}"
+        tags: l3_svi
+      
+      - name: "Enable L3 Vlan Interfaces"
+        ios_interface:
+          name: "{{ item.name }}"
+          state: up
+        loop: "{{ svi_interfaces }}"
+        tags: l3_svi_enable
+
+      - name: "Enable VRRP on L3 Vlan Interfaces"
+        ios_config:
+          parenets: interface {{ item.name }}
+          lines:
+            - vrrp {{ item.namee.split('Vlan')[1] }} priority {{ hst_vrrp_priority}}
+            - vrrp {{ item.namee.split('Vlan')[1] }} ip {{ item.ipv4 | ipv4(254) | ipaddr('address')}}
+          loop: "{{ svi_interfaces | selectattr('vrrp','equalto',true) | list }}"
+        tags: l3_svi_vrrp_enable
