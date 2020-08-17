@@ -16,3 +16,25 @@ svi_interfaces:
     ipv4: 10.1.100.0/24
     vrrp: yes
     ospf: passive
+
+core_l3_links:
+  core01:
+    - name: Ethernet1/0
+      description: wan01_Gi2
+      ipv4: 10.3.1.0/30
+      ospf: yes
+      ospf_metric: 100
+      peer: wan01
+    - name: Loopback0
+      ipv4: "{{ loopback_prefix | ipv4(hst_router_id) | ipaddr('address') + '/32'}}"
+      ospf: passive
+  core02:
+    - name: Ethernet1/0
+      description: wan02_Gi2
+      ipv4: 10.3.1.4/30
+      ospf: yes
+      ospf_metric: 200
+      peer: wan02
+    - name: Loopback0
+      ipv4: "{{ loopback_prefix | ipv4(hst_router_id) | ipaddr('address') + '/32'}}"
+      ospf: passive
