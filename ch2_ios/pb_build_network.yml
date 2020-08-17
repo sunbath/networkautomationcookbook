@@ -39,3 +39,21 @@
           trunk_allowed_vlans: "{{ vlans | map(attribute='vlan_id') | join(',') }}"
           state: present
         loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','trunk') | list }}"
+        tags: trunk_ports
+      
+      - name: "Enable dot1q Trunks"
+        ios_config:
+          lines:
+            - switchport trunk encapsulation dot1q
+          parents: interface {{ item.name }}
+        loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','trunk') | list }}"
+        tags: dot1q
+
+      - name: "Configure Access Ports"
+        ios_l2_interface:
+          name: "{{ item.name }}"
+          mode: "{{ item.mode }}"
+          access_vlan: "{{ item.vlan }}"
+          state: present
+        loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','access') | list }}"
+        tags: access_ports

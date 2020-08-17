@@ -11,9 +11,15 @@ sudo yum install gettext-devel openssl-devel perl-CPAN perl-devel zlib-devel
 
 #Download latest version of git from web
 wget https://github.com/git/git/archive/v2.1.2.tar.gz -O git.tar.gz
+
+#Extract git from the tgz
 tar -zxf git.tar.gz
+
+#Configure and Install git (including curl and expat)
 cd git-*
 make configure
 ./configure --prefix=/usr/local
 sudo make && sudo make install
+
+#Git Version Check
 git --version
