@@ -38,4 +38,4 @@
           mode: "{{ item.mode }}"
           trunk_allowed_vlans: "{{ vlans | map(attribute='vlan_id') | join(',') }}"
           state: present
-        loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','trunk') | list }}"
+        loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','trunk') | list }}123"
