@@ -1,0 +1,19 @@
+#Remove old git
+sudo yum remove git*
+
+#Install curl and expat for https handlers
+sudo yum install curl-devel
+sudo yum install expat-devel
+
+#Install Development Tools
+sudo yum groupinstall "Development Tools"
+sudo yum install gettext-devel openssl-devel perl-CPAN perl-devel zlib-devel
+
+#Download latest version of git from web
+wget https://github.com/git/git/archive/v2.1.2.tar.gz -O git.tar.gz
+tar -zxf git.tar.gz
+cd git-*
+make configure
+./configure --prefix=/usr/local
+sudo make && sudo make install
+git --version
