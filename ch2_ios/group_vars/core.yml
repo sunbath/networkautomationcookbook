@@ -1,3 +1,6 @@
+ospf_area: 0
+ospf_metric: 10
+
 core_vlans:
   - name: l3_core_vlan
     vlan_id: 300
@@ -19,8 +22,8 @@ svi_interfaces:
 
 core_l3_links:
   core01:
-    - name: Ethernet1/0
-      description: wan01_Gi2
+    - name: GigabitEthernet1/0
+      description: wan01_G0/2
       ipv4: 10.3.1.0/30
       ospf: yes
       ospf_metric: 100
@@ -29,8 +32,8 @@ core_l3_links:
       ipv4: "{{ loopback_prefix | ipv4(hst_router_id) | ipaddr('address') + '/32'}}"
       ospf: passive
   core02:
-    - name: Ethernet1/0
-      description: wan02_Gi2
+    - name: GigabitEthernet1/0
+      description: wan02_G0/2
       ipv4: 10.3.1.4/30
       ospf: yes
       ospf_metric: 200
