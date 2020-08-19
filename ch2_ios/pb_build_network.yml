@@ -153,7 +153,7 @@
           logging: true
           source_int: GigabitEthernet0/2
           state: present
-          
+
       - name: "P3T3: Configure All Interfaces"
         ios_interface:
           name: "{{ item.name }}"
@@ -189,4 +189,33 @@
           save_when: changed
         loop: "{{ wan_l3_links[inventory_hostname] | selectattr('ospf','equalto','passive') | list }}"
   
+  - name: "PLAY 4: Configure ISP Router"
+    hosts: isp
+    tags: isp
+    tasks:
+      - name: "P4T1: Configure System parameters"
+        ios_system:
+          hostname: "{{ inventory_hostname }}"
+          domain_name: "{{ domain_name }}"
+          lookup_enabled: no
+          name_servers: "{{ name_servers }}"
+      
+      - name: "P4T2: Configure NTP"
+        ios_ntp:
+          server: "{{ ntp_server }}"
+          logging: true
+          source_int: GigabitEthernet0/0
+          state: present
+
+      - name: "P4T3: Configure All Interfaces"
+        ios_interface:
+          name: "{{ item.name }}"
+          description: "{{ item.description | default('') }}"
+          state: up
+        loop: "{{ isp_l3_links }}"
   
+      - name: "P4T4: Configure Interface IP Addresses"
+        ios_l3_interface:
+          name: "{{ item.name }}"
+          ipv4:  "{{ item.ipv4 }}"
+        loop: "{{ isp_l3_links }}"
