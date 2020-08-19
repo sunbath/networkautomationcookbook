@@ -3,22 +3,28 @@ interfaces:
   - name: GigabitEthernet0/1
     description: access01_G0/1
     mode: trunk
+    inter-core: no
   - name: GigabitEthernet0/2
     description: access02_G0/1
     mode: trunk
+    inter-core: no
   - name: GigabitEthernet0/3
     description: core02_g0/3
     mode: trunk
+    inter-core: yes
   core02:
   - name: GigabitEthernet0/1
     description: access01_G0/2
     mode: trunk
+    inter-core: no
   - name: GigabitEthernet0/2
     description: access02_G0/2
     mode: trunk
+    inter-core: no
   - name: GigabitEthernet0/3
     description: core01_g0/3
     mode: trunk
+    inter-core: yes
   access01:
   - name: GigabitEthernet0/1
     description: core01_G0/1
@@ -53,3 +59,13 @@ vlans:
     vlan_id: 20
   - name: Web
     vlan_id: 100
+
+core_vlans:
+  - name: Data
+    vlan_id: 10
+  - name: Voice
+    vlan_id: 20
+  - name: Web
+    vlan_id: 100
+  - name: L3-Core
+    vlan_id: 200

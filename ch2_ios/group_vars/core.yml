@@ -1,11 +1,6 @@
 ospf_area: 0
 ospf_metric: 10
 
-core_vlans:
-  - name: l3_core_vlan
-    vlan_id: 300
-    interface: GigbaitEthernet0/3
-
 svi_interfaces:
   - name: Vlan10
     ipv4: 10.1.10.0/24
@@ -19,6 +14,10 @@ svi_interfaces:
     ipv4: 10.1.100.0/24
     vrrp: yes
     ospf: passive
+  - name: Vlan200
+    ipv4: 10.1.200.0/24
+    ospf: yes
+    vrrp: no
 
 core_l3_links:
   core01:

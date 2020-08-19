@@ -13,7 +13,7 @@ wan_l3_links:
       description: "wan01_Gi3"
       peer: wan01
       ipv4: 10.3.1.9/30
-      ospf: no
+      ospf: yes
     - name: GigabitEthernet0/4
       description: "isp01_Gi2"
       peer: wan01
@@ -33,7 +33,7 @@ wan_l3_links:
       description: "wan01_Gi3"
       peer: wan01
       ipv4: 10.3.1.10/30
-      ospf: no
+      ospf: yes
     - name: GigabitEthernet0/4
       description: "isp01_Gi3"
       peer: wan01

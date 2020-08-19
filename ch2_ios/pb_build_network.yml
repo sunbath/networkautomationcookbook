@@ -25,21 +25,39 @@
         loop: "{{ interfaces[inventory_hostname] }}"
         register: ios_intf
       
-      - name: "P1T4: Create L2 Vlans"
+      - name: "P1T4A: Create L2 Vlans"
         ios_vlan:
           vlan_id: "{{ item.vlan_id }}"
           name: "{{ item.name }}"
         loop: "{{ vlans }}"
         tags: vlan
+
+      - name: "P1T4B: Create Inter-Core L2 Vlans"
+        when: inventory_hostname in groups['core']
+        ios_vlan:
+          vlan_id: "{{ item.vlan_id }}"
+          name: "{{ item.name }}"
+        loop: "{{ core_vlans }}"
+        tags: core_vlan
       
-      - name: "P1T5: Configure L2 Trunks"
+      - name: "P1T5A: Configure L2 Trunks"
         ios_l2_interface:
           name: "{{ item.name }}"
           mode: "{{ item.mode }}"
           trunk_allowed_vlans: "{{ vlans | map(attribute='vlan_id') | join(',') }}"
           state: present
         loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','trunk') | list }}"
-        tags: trunk_ports
+        tags: core_trunk_ports
+
+      - name: "P1T5B: Configure L2 Trunks between core"
+        when: inventory_hostname in groups['core']
+        ios_l2_interface:
+          name: "{{ item.name }}"
+          mode: "{{ item.mode }}"
+          trunk_allowed_vlans: "{{ core_vlans | map(attribute='vlan_id') | join(',') }}"
+          state: present
+        loop: "{{ interfaces[inventory_hostname] | selectattr('inter-core','equalto', True) | list }}"
+        tags: core_trunk_ports
       
       - name: "P1T6: Enable dot1q Trunks"
         ios_config:
@@ -60,7 +78,7 @@
       
   - name: "PLAY 2: Configure Core Switches"
     hosts: core
-    tags: l3_core
+    tags: core
     tasks:
       - name: "P2T1: Configure L3 Vlan Interfaces"
         ios_l3_interface:
