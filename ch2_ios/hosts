@@ -10,6 +10,12 @@ core02 ansible_host=192.168.11.214
 wan01 ansible_host=192.168.11.215
 wan02 ansible_host=192.168.11.216
 
+[isp]
+isp01 ansible_host=192.168.11.217
+
+[oob]
+oob_switch ansible_host=192.168.11.210
+
 [lan:children]
 access
 core
@@ -17,3 +23,5 @@ core
 [network:children]
 lan
 wan
+isp
+oob

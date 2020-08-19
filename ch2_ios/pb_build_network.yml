@@ -153,19 +153,11 @@
           logging: true
           source_int: GigabitEthernet0/2
           state: present
-  
-#      - name: "P3T2: Configure Managment Static Routes"
-#        ios_static_route:
-#          prefix: "{{ item.prefix.split('/')[0] }}"
-#          mask: "{{ item.prefix | ipv4('netmask') }}"
-#          next_hop: "{{ item.next_hop }}"
-#        loop: "{{ mgmt_static_routes }}"
-  
+          
       - name: "P3T3: Configure All Interfaces"
         ios_interface:
           name: "{{ item.name }}"
           description: "{{ item.description | default('') }}"
-          mtu: "{{ intf_mtu }}"
           state: up
         loop: "{{ wan_l3_links[inventory_hostname] }}"
   

@@ -1,0 +1,11 @@
+---
+  - name: "PLAY 1: Save Configuration"
+    hosts: all
+    connection: local
+    gather_facts: no
+    tasks:
+      - name: "Write Configuration to running-config"
+        ios_config:
+          save_when: always
+        register: output
+
