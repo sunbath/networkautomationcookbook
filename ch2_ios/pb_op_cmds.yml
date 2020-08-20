@@ -1,0 +1,47 @@
+---
+- name: "PLAY 1: Execute Operational Commands"
+  hosts: network
+  vars:
+    config_folder: "configs"
+    op_folder: "op_data"
+    op_cmds:
+      - show ip ospf neighbor
+      - show ip route
+  tasks:
+    - name: "P1T1: Build Directories to Store Data"
+      block:
+        - name: "Create folder to store Device Config"
+          file:
+            path: "{{ config_folder }}"
+            state: directory
+        - name: "Create folder to store operational commands"
+          file:
+            path: "{{ op_folder }}"
+            state: directory
+      run_once: yes
+      delegate_to: localhost
+    
+    - name: "P2T1: Get Running Configs from Devices"
+      ios_command:
+        commands: show running-config
+      register: show_run
+    - name: "P2T2: Save Running Config per Deivce"
+      copy:
+        content: "{{ show_run.stdout[0] }}"
+        dest: "{{ config_folder }}/{{ inventory_hostname }}.cfg"
+    
+    - name: "P3T1: Create Folder per Device"
+      file:
+        path: "{{ op_folder }}/{{ inventory_hostname }}"
+        state: directory
+      delegate_to: localhost
+    - name: "P3T2: Get Operational Data from Devices"
+      ios_command:
+        commands: "{{ item }}"
+      register: op_output
+      loop: "{{ op_cmds }}"
+    - name: "P3T3: Save output per each node"
+      copy:
+        content: "{{ item.stdout[0] }}"
+        dest: "{{ op_folder }}/{{ inventory_hostname }}/{{item.item | replace(' ', '_')}}.txt"
+      loop: "{{ op_output.results }}"
