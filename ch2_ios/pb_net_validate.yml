@@ -1,0 +1,21 @@
+---
+- name: "PLAY 1: Validate Network Reachability"
+  hosts: core, wan
+  vars:
+    host_id: 10
+    packet_count: 10
+  tasks:
+    - name: "P1T1: Get all SVI Prefixes"
+      set_fact:
+        all_svi_prefixes: "{{ svi_interfaces | selectattr('vrrp') |
+                              map(attribute='ipv4') | list }}"
+      run_once: yes
+      delegate_to: localhost
+      tags: svi
+
+    - name: "Ping Hosts in all VLANs"
+      ios_ping:
+        dest: "{{ item | ipaddr(1) | ipaddr('address') }}"
+      loop: "{{ all_svi_prefixes }}"
+      ignore_errors: yes
+      tags: svi
