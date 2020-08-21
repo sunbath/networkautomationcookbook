@@ -1,2 +1,11 @@
 global:
   mgmt_vrf: MGMT
+  dns:
+    - 172.20.1.1
+    - 172.20.1.15
+  site: DC1
+  users:
+  -   password: ansible123
+      priviledge: 15
+      role: network-admin
+      username: admin
