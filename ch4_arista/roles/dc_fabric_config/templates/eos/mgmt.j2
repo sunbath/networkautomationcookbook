@@ -1,0 +1,16 @@
+hostname {{global.site|lower}}-{{inventory_hostname}}
+!
+snmp-server enable traps
+!
+spanning-tree mode none
+!
+aaa authorization exec default local
+!
+{% for user in global.users%}
+username {{user.username}} privilege {{user.privilege}} role {{user.role|default('network-admin')}} secret {{user.password}}
+{% endfor%}
+!
+{% for dns_server in global.dns%}
+ip name-server vrf default {{ dns_server }}
+{% endfor %}
+!

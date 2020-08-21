@@ -1,0 +1,8 @@
+---
+  - name: "Build Arista DC Fabric"
+    hosts: arista
+    tasks:
+      - name: "Generate DC Fabric Configuration"
+        import_role:
+          name: dc_fabric_config
+        delegate_to: localhost
