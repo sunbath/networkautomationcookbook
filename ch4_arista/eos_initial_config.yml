@@ -1,0 +1,17 @@
+---
+- name: Generate EOS config from Jinja2
+  hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: Create Configs Directory
+    file: path=initial_configs  state=directory
+
+- name: Generate Cisco config from Jinja2
+  hosts: arista
+  gather_facts: no
+  tasks:
+  - name: Generate Cisco Basic Config
+    template:
+      src: "templates/eos_initial_config_jinja2.yml"
+      dest: "initial_configs/{{inventory_hostname}}_initial.cfg"
+    delegate_to: localhost

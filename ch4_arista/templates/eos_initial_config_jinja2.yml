@@ -1,0 +1,30 @@
+configure t
+!
+hostname {{ hostname }}
+username {{ ansible_user }} privilege 15 role network admin secret {{ ansible_ssh_pass }}
+!
+vrf definition MGMT
+   description Management_vrf
+!
+interface Management1
+   vrf forwarding MGMT
+   ip address {{ mgmt1_ipv4 }}
+   no shutdown
+!
+ip routing
+!
+ip routing vrf MGMT 
+ip route vrf MGMT 0.0.0.0/0 {{ mgmt1_default_gateway }}
+!
+management ssh
+   idle-timeout 300
+   authentication mode password
+   login timeout 300
+   !
+   vrf MGMT
+      no shutdown
+!
+end
+wr
+!
+ping vrf MGMT 192.168.11.1 repeat 10
