@@ -1,7 +1,7 @@
 configure t
 !
 hostname {{ hostname }}
-username {{ ansible_user }} privilege 15 role network admin secret {{ ansible_ssh_pass }}
+username {{ ansible_user }} privilege 15 role network-admin secret 0 {{ ansible_ssh_pass }}
 !
 vrf definition MGMT
    description Management_vrf
