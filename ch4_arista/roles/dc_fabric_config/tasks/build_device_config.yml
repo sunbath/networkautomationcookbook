@@ -4,3 +4,8 @@
       src: "{{ansible_network_os}}/mgmt.j2"
       dest: "{{build_dir}}/00_mgmt.cfg"
     tags: mgmt
+  - name: "Interface Configuration"
+    template:
+      src: "{{ansible_network_os}}/intf.j2"
+      dest: "{{build_dir}}/00_intf.cfg"
+    tags: intf
