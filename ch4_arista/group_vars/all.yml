@@ -2,16 +2,27 @@ config_dir: configs
 tmp_dir: tmp
 
 global:
-  mgmt_vrf: MGMT
+  bgp_asn: 65000
   dns:
-    - 172.20.1.1
-    - 172.20.1.15
+  - 172.20.1.1
+  - 172.20.1.15
+  fabric_subnet: 172.31.1.0/24
+  loopback_subnet: 10.100.1.0/24
+  mgmt_gw: 172.20.1.33
+  mgmt_prefix: 28
+  mgmt_prefixes:
+  - 10.8.0.0/24
+  - 172.20.1.0/24
+  - 192.168.0.0/24
+  mgmt_vrf: MGMT
+  mlag_vlan: 4094
+  p2p_prefix: 31
   site: DC1
   users:
   -   password: ansible123
       privilege: 15
       role: network-admin
-      username: admin
+      username: ansible
 
 p2p_ip:
   leaf01:
