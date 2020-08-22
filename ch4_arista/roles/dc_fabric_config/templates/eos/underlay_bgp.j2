@@ -27,10 +27,10 @@ router bgp {{bgp_asn}}
   neighbor {{ bgp_grp }} graceful-restart-helper
   neighbor {{ bgp_grp }} send-community standard extended
   neighbor {{ bgp_grp }} maximum-routes 100000 warning-only
-  {% for p in bgp_peers %}
+{% for p in bgp_peers %}
   neighbor {{ p.peer_ip }} peer-group {{ bgp_grp}}
   neighbor {{ p.peer_ip }} remote-as {{ p.remote_as }} 
-  {% endfor %}
+{% endfor %}
   redistribute connected route-map loopback
   !
     address-family ipv4

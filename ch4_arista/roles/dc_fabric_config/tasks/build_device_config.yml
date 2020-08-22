@@ -14,3 +14,8 @@
       src: "{{ansible_network_os}}/underlay_bgp.j2"
       dest: "{{build_dir}}/03_bgp.cfg"
     tags: bgp
+  - name: "Overlay BGP Configuration"
+    template:
+      src: "{{ansible_network_os}}/overlay_bgp.j2"
+      dest: "{{build_dir}}/04_evpn.cfg"
+    tags: bgp
